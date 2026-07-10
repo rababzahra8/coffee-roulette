@@ -1,0 +1,42 @@
+export const DEFAULT_INGREDIENTS = [
+  'Espresso',
+  'Instant Coffee',
+  'Milk',
+  'Oat Milk',
+  'Almond Milk',
+  'Ice',
+  'Sugar',
+  'Brown Sugar',
+  'Honey',
+  'Vanilla',
+  'Cinnamon',
+  'Cocoa',
+  'Chocolate',
+  'Caramel',
+  'Whipped Cream',
+] as const
+
+export const EXTRA_INGREDIENTS = [
+  'Cold Brew',
+  'Heavy Cream',
+  'Coconut Milk',
+  'Maple Syrup',
+  'Nutmeg',
+  'Cardamom',
+  'Mint',
+  'Orange Peel',
+  'Condensed Milk',
+  'Butter',
+  'Salt',
+  'Peppermint',
+  'Lavender',
+  'Ginger',
+  'Coconut Flakes',
+  'Marshmallow',
+  'Irish Cream',
+  'Hazelnut Syrup',
+  'Pumpkin Spice',
+  'Matcha',
+] as const
+
+export const ALL_INGREDIENTS = [...DEFAULT_INGREDIENTS, ...EXTRA_INGREDIENTS]
