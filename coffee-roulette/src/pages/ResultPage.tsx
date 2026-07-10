@@ -1,29 +1,35 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Heart, RefreshCw, Share2, Clock, Flame } from 'lucide-react'
+import { Heart, RefreshCw, Share2, Clock, Flame, Sparkles } from 'lucide-react'
 import { Navbar } from '../components/layout/Navbar'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { StrengthBar } from '../components/ui/StrengthBar'
+import { SpinModeSheet } from '../components/ui/SpinModeSheet'
 import { useApp } from '../context/AppContext'
 import { useFavorites } from '../hooks/useFavorites'
 import { getSubstitutionMessages } from '../data/substitutions'
 import { shareRecipe, vibrate } from '../utils/helpers'
+import type { SpinMode } from '../types'
 
 export function ResultPage() {
   const navigate = useNavigate()
-  const { currentRecipe, selectedIngredients } = useApp()
+  const { currentRecipe, selectedIngredients, setSpinMode } = useApp()
   const { isFavorite, toggleFavorite } = useFavorites()
+  const [showSpinSheet, setShowSpinSheet] = useState(false)
 
   if (!currentRecipe) {
     navigate('/home')
     return null
   }
 
-  const substitutions = getSubstitutionMessages(
-    currentRecipe.ingredients,
-    selectedIngredients
-  )
+  const isAI = currentRecipe.source === 'ai' || currentRecipe.source === 'battle'
+  const ruleBasedSubs = getSubstitutionMessages(currentRecipe.ingredients, selectedIngredients)
+  const allSubs = [
+    ...(currentRecipe.aiSubstitutions || []),
+    ...ruleBasedSubs,
+  ]
   const saved = isFavorite(currentRecipe.id)
 
   const handleSave = () => {
@@ -36,7 +42,9 @@ export function ResultPage() {
     vibrate(30)
   }
 
-  const handleSpinAgain = () => {
+  const handleSpinSelect = (mode: SpinMode) => {
+    setSpinMode(mode)
+    setShowSpinSheet(false)
     navigate('/roulette')
   }
 
@@ -51,11 +59,7 @@ export function ResultPage() {
           transition={{ type: 'spring', stiffness: 200 }}
           className="text-center mb-8"
         >
-          <motion.div
-            initial={{ y: 20 }}
-            animate={{ y: 0 }}
-            className="text-8xl mb-4"
-          >
+          <motion.div initial={{ y: 20 }} animate={{ y: 0 }} className="text-8xl mb-4">
             {currentRecipe.emoji}
           </motion.div>
           <h1 className="font-display text-3xl md:text-4xl font-bold text-espresso dark:text-cream mb-3">
@@ -74,19 +78,53 @@ export function ResultPage() {
                 {tag}
               </span>
             ))}
+            {isAI && (
+              <span className="px-3 py-1 rounded-full text-sm font-medium bg-espresso/10 text-espresso dark:text-cream flex items-center gap-1">
+                <Sparkles size={12} /> AI Crafted
+              </span>
+            )}
           </div>
         </motion.div>
 
-        {substitutions.length > 0 && (
+        {currentRecipe.whyThisWorks && (
+          <Card glass delay={0.05} className="mb-6 !p-4 border-l-4 border-espresso/30">
+            <p className="text-sm font-medium text-espresso dark:text-cream mb-1">
+              ✨ Why this works
+            </p>
+            <p className="text-sm text-espresso/70 dark:text-cream/70">
+              {currentRecipe.whyThisWorks}
+            </p>
+          </Card>
+        )}
+
+        {allSubs.length > 0 && (
           <Card glass delay={0.1} className="mb-6 !p-4 border-l-4 border-caramel">
             <p className="text-sm font-medium text-espresso dark:text-cream mb-2">
               💡 Smart swaps
             </p>
-            {substitutions.map((msg, i) => (
+            {allSubs.map((msg, i) => (
               <p key={i} className="text-sm text-espresso/70 dark:text-cream/70">
                 {msg}
               </p>
             ))}
+          </Card>
+        )}
+
+        {currentRecipe.optionalAdditions && currentRecipe.optionalAdditions.length > 0 && (
+          <Card delay={0.12} className="mb-6 !p-4">
+            <p className="text-sm font-medium text-espresso dark:text-cream mb-2">
+              Optional additions
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {currentRecipe.optionalAdditions.map((item) => (
+                <span
+                  key={item}
+                  className="text-xs px-2 py-1 rounded-full bg-beige/50 text-espresso/70 dark:text-cream/70"
+                >
+                  + {item}
+                </span>
+              ))}
+            </div>
           </Card>
         )}
 
@@ -156,21 +194,23 @@ export function ResultPage() {
           </Button>
           <Button
             variant="secondary"
-            onClick={handleSpinAgain}
+            onClick={() => setShowSpinSheet(true)}
             className="flex-1"
             icon={<RefreshCw size={18} />}
           >
             Spin Again
           </Button>
-          <Button
-            variant="secondary"
-            onClick={handleShare}
-            icon={<Share2 size={18} />}
-          >
+          <Button variant="secondary" onClick={handleShare} icon={<Share2 size={18} />}>
             Share
           </Button>
         </motion.div>
       </main>
+
+      <SpinModeSheet
+        open={showSpinSheet}
+        onClose={() => setShowSpinSheet(false)}
+        onSelect={handleSpinSelect}
+      />
     </div>
   )
 }

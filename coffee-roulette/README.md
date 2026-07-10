@@ -1,25 +1,31 @@
 # Coffee Roulette — App
 
-This folder contains the full source code for the Coffee Roulette web app.
+See the [root README](../README.md) for MLH challenge details, features, and setup.
 
-See the [root README](../README.md) for overview, features, and MLH challenge details.
+## MLH Challenges
+
+| Challenge | Branch | What was built |
+|-----------|--------|----------------|
+| **Challenge 3** | `master` | Full app built with Cursor prompts |
+| **Challenge 4** | `feature/brew-battle-LLM` | AI recipe engine + Brew Battle |
 
 ## Commands
 
 ```bash
-npm install    # install dependencies
-npm run dev    # start dev server → http://localhost:5173
-npm run build  # production build
-npm run preview # preview production build
+npm install
+cp .env.example .env    # add API keys locally
+npm run dev             # http://localhost:5173
+npm run build
 ```
 
-## Source layout
+## Challenge 4 — New files
 
 ```
 src/
-├── components/coffee/   # SVG animations (cup, steam, beans)
-├── components/ui/     # Reusable UI primitives
-├── data/recipes.ts      # 55+ hardcoded coffee recipes
-├── data/substitutions.ts # Smart ingredient swap logic
-└── pages/               # Splash, Home, Roulette, Result, Favorites
+├── services/ai.ts          # OpenAI/Groq LLM integration
+├── services/prompts.ts     # Structured barista prompts
+├── pages/BrewBattlePage.tsx
+├── components/ai/          # BrewingLoader, Confetti
+├── components/battle/      # BattleCard
+└── components/ui/          # BottomSheet, SpinModeSheet
 ```

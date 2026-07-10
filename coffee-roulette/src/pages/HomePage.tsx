@@ -5,15 +5,18 @@ import { Search } from 'lucide-react'
 import { Navbar } from '../components/layout/Navbar'
 import { Chip } from '../components/ui/Chip'
 import { Button } from '../components/ui/Button'
+import { SpinModeSheet } from '../components/ui/SpinModeSheet'
 import { FloatingBeans } from '../components/coffee/FloatingBeans'
 import { DEFAULT_INGREDIENTS, ALL_INGREDIENTS } from '../data/ingredients'
 import { useApp } from '../context/AppContext'
 import { getGreeting } from '../utils/helpers'
+import type { SpinMode } from '../types'
 
 export function HomePage() {
   const navigate = useNavigate()
-  const { selectedIngredients, toggleIngredient, addIngredient } = useApp()
+  const { selectedIngredients, toggleIngredient, addIngredient, setSpinMode } = useApp()
   const [search, setSearch] = useState('')
+  const [showSpinSheet, setShowSpinSheet] = useState(false)
   const greeting = getGreeting()
 
   const extraIngredients = ALL_INGREDIENTS.filter(
@@ -29,7 +32,9 @@ export function HomePage() {
       )
     : []
 
-  const handleSpin = () => {
+  const handleSpinSelect = (mode: SpinMode) => {
+    setSpinMode(mode)
+    setShowSpinSheet(false)
     navigate('/roulette')
   }
 
@@ -149,7 +154,7 @@ export function HomePage() {
       >
         <div className="max-w-2xl mx-auto">
           <Button
-            onClick={handleSpin}
+            onClick={() => setShowSpinSheet(true)}
             size="lg"
             className="w-full !bg-gradient-to-r !from-espresso !to-espresso-light !text-cream"
             icon={<span className="text-xl">🎲</span>}
@@ -158,6 +163,12 @@ export function HomePage() {
           </Button>
         </div>
       </motion.div>
+
+      <SpinModeSheet
+        open={showSpinSheet}
+        onClose={() => setShowSpinSheet(false)}
+        onSelect={handleSpinSelect}
+      />
     </div>
   )
 }
