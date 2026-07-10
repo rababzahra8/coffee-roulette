@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
-import type { Recipe } from '../types'
+import type { Recipe, BrewBattle, SpinMode, AIRecipeChoice } from '../types'
 
 interface AppContextType {
   selectedIngredients: string[]
@@ -9,6 +9,12 @@ interface AppContextType {
   setCurrentRecipe: (recipe: Recipe | null) => void
   isSpinning: boolean
   setIsSpinning: (spinning: boolean) => void
+  spinMode: SpinMode
+  setSpinMode: (mode: SpinMode) => void
+  currentBattle: BrewBattle | null
+  setCurrentBattle: (battle: BrewBattle | null) => void
+  aiRecipeChoice: AIRecipeChoice | null
+  setAiRecipeChoice: (choice: AIRecipeChoice | null) => void
 }
 
 const AppContext = createContext<AppContextType | null>(null)
@@ -17,6 +23,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([])
   const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null)
   const [isSpinning, setIsSpinning] = useState(false)
+  const [spinMode, setSpinMode] = useState<SpinMode>('quick')
+  const [currentBattle, setCurrentBattle] = useState<BrewBattle | null>(null)
+  const [aiRecipeChoice, setAiRecipeChoice] = useState<AIRecipeChoice | null>(null)
 
   const toggleIngredient = useCallback((ingredient: string) => {
     setSelectedIngredients((prev) =>
@@ -42,6 +51,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setCurrentRecipe,
         isSpinning,
         setIsSpinning,
+        spinMode,
+        setSpinMode,
+        currentBattle,
+        setCurrentBattle,
+        aiRecipeChoice,
+        setAiRecipeChoice,
       }}
     >
       {children}

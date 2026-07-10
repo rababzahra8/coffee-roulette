@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Heart, Moon, Sun } from 'lucide-react'
+import { Home, Heart, Moon, Sun, Swords } from 'lucide-react'
 import { useDarkMode } from '../../hooks/useDarkMode'
 
 export function Navbar() {
@@ -9,6 +9,7 @@ export function Navbar() {
 
   const links = [
     { to: '/home', icon: Home, label: 'Home' },
+    { to: '/brew-battle', icon: Swords, label: 'Brew Battle' },
     { to: '/favorites', icon: Heart, label: 'Favorites' },
   ]
 
