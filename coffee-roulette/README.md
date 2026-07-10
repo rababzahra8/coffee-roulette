@@ -1,59 +1,25 @@
-# Coffee Roulette ☕
+# Coffee Roulette — App
 
-A modern, premium web experience that surprises you with random coffee recipes based on the ingredients you have.
+This folder contains the full source code for the Coffee Roulette web app.
 
-**Every coffee starts with a surprise.**
+See the [root README](../README.md) for overview, features, and MLH challenge details.
 
-## Features
-
-- **Splash screen** with animated coffee cup and rising steam
-- **Ingredient selection** with searchable chips
-- **Roulette animation** — spinning cup, flying ingredients, rotating beans
-- **50+ coffee recipes** with dynamic descriptions
-- **Smart substitutions** when you're missing an ingredient
-- **Favorites** with search and filters (Hot, Cold, Sweet, Strong)
-- **Dark mode** support
-- **Micro-interactions** — chip bounce, steam, parallax beans, haptic feedback
-- **Share recipes** via Web Share API
-
-## Tech Stack
-
-- React 19 + TypeScript
-- Vite
-- Tailwind CSS v4
-- Framer Motion
-- React Router
-- Lucide Icons
-
-## Getting Started
+## Commands
 
 ```bash
-cd coffee-roulette
-npm install
-npm run dev
+npm install    # install dependencies
+npm run dev    # start dev server → http://localhost:5173
+npm run build  # production build
+npm run preview # preview production build
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-## Build
-
-```bash
-npm run build
-npm run preview
-```
-
-## Project Structure
+## Source layout
 
 ```
 src/
-├── components/
-│   ├── coffee/     # CoffeeCup, Steam, FloatingBeans
-│   ├── layout/     # Navbar
-│   └── ui/         # Button, Chip, Card, StrengthBar
-├── context/        # App state
-├── data/           # Recipes, ingredients, substitutions
-├── hooks/          # useDarkMode, useFavorites
-├── pages/          # Splash, Home, Roulette, Result, Favorites
-├── types/          # TypeScript interfaces
-└── utils/          # Helpers
+├── components/coffee/   # SVG animations (cup, steam, beans)
+├── components/ui/     # Reusable UI primitives
+├── data/recipes.ts      # 55+ hardcoded coffee recipes
+├── data/substitutions.ts # Smart ingredient swap logic
+└── pages/               # Splash, Home, Roulette, Result, Favorites
 ```
