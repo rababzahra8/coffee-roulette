@@ -21,11 +21,11 @@ Create a full web app using **Cursor AI prompts**. Coffee Roulette was built fro
 
 ### Challenge 4 — Add a New Feature (`feature/brew-battle-LLM` branch)
 
-Extend the project with **AI-powered features** using LLM integration:
+Extend the project with **AI-powered features** using **Groq (Llama 3.3)**:
 
-- **Ask AI** — Generate unique recipes via OpenAI/Groq-compatible APIs
+- **Ask AI** — Generates 2 unique recipes; pick your favorite on a VS screen
 - **Quick Recipe** — Instant offline fallback from curated database
-- **Brew Battle** — AI generates two rival recipes; vote, confetti, share
+- **Brew Battle** — Two rival AI recipes; vote, confetti, and share
 - Bottom sheet to choose Quick vs AI on spin
 - Brewing loader with streaming status text
 - Local cache for AI-generated recipes
@@ -41,9 +41,10 @@ Extend the project with **AI-powered features** using LLM integration:
 |---------|-------------|
 | **Splash Screen** | Animated coffee cup with rising steam |
 | **Ingredient Picker** | 15+ default chips + searchable extras |
-| **Spin Modes** | Quick Recipe ⚡ or Ask AI ✨ |
+| **Spin Modes** | Quick Recipe ⚡ or Ask AI ✨ (2 recipes) |
+| **Pick Your Brew** | AI shows 2 recipes side-by-side — choose one |
 | **Roulette Animation** | Spinning cup, flying ingredients, rotating beans |
-| **Brew Battle** | Two AI recipes head-to-head with voting & share |
+| **Brew Battle** | Head-to-head AI recipes with voting & share |
 | **55+ Recipes** | Curated coffees + unlimited AI-generated ones |
 | **Smart Substitutions** | AI + rule-based ingredient swap suggestions |
 | **Favorites** | Save recipes with search & filters |
@@ -54,7 +55,7 @@ Extend the project with **AI-powered features** using LLM integration:
 ## 🎯 User Flow
 
 ```
-Splash → Home → Spin (Quick / AI) → Result → Save / Share
+Splash → Home → Spin (Quick / AI) → Pick Your Brew (2 recipes) → Result
                     ↓
               Brew Battle → Vote → Winner 🏆 → Share
 ```
@@ -63,7 +64,7 @@ Splash → Home → Spin (Quick / AI) → Result → Save / Share
 
 ## 🛠 Tech Stack
 
-React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · React Router · OpenAI/Groq API
+React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · React Router · Groq (Llama 3.3)
 
 ---
 
@@ -72,21 +73,44 @@ React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · React Rout
 ```bash
 cd coffee-roulette
 npm install
-cp .env.example .env   # add your API keys
+cp .env.example .env   # add your Groq API key
 npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173)
 
-### API Keys (local only — never commit `.env`)
+### API Key (local only — never commit `.env`)
 
-Copy `.env.example` to `.env` and add:
+```
+VITE_GROQ_API_KEY=your_key_here
+```
 
-| Variable | Provider |
-|----------|----------|
-| `VITE_OPENAI_API_KEY` | OpenAI |
-| `VITE_GROQ_API_KEY` | Groq (optional fallback) |
-| `VITE_GEMINI_API_KEY` | Gemini (future use) |
+Get a free key at [console.groq.com](https://console.groq.com). Uses **Llama 3.3 70B**.
+
+### Build
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## 📁 Project Structure
+
+```
+coffee-roulette/
+├── src/
+│   ├── components/ai/       # BrewingLoader, Confetti
+│   ├── components/battle/   # BattleCard
+│   ├── components/coffee/   # CoffeeCup, Steam, FloatingBeans
+│   ├── components/ui/       # Button, Chip, BottomSheet, SpinModeSheet
+│   ├── services/ai.ts       # Groq (Llama) LLM integration
+│   ├── data/recipes.ts      # 55+ curated recipes
+│   └── pages/               # Splash, Home, Roulette, AIChoice, Result, BrewBattle, Favorites
+├── .env.example
+└── package.json
+```
 
 ---
 

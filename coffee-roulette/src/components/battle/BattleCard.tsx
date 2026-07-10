@@ -106,7 +106,7 @@ export function BattleCard({
           onClick={onVote}
           className="w-full mt-4 py-2.5 rounded-xl bg-espresso text-cream text-sm font-semibold cursor-pointer"
         >
-          Vote for this ☕
+          {showDetails ? 'Choose this ☕' : 'Vote for this ☕'}
         </motion.button>
       )}
     </motion.div>

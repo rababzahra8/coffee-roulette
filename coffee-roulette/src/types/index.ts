@@ -60,6 +60,12 @@ export interface BrewBattle {
   createdAt: number
 }
 
+export interface AIRecipeChoice {
+  recipeA: Recipe
+  recipeB: Recipe
+  ingredients: string[]
+}
+
 export interface CachedAIRecipe {
   recipe: Recipe
   ingredients: string[]

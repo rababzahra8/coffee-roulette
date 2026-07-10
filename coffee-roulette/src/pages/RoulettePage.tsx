@@ -5,16 +5,14 @@ import { CoffeeCup } from '../components/coffee/CoffeeCup'
 import { Steam } from '../components/coffee/Steam'
 import { BrewingLoader } from '../components/ai/BrewingLoader'
 import { useApp } from '../context/AppContext'
-import { useRecipeCache } from '../context/RecipeCacheContext'
 import { getRandomRecipe } from '../data/recipes'
-import { generateAIRecipe, AIRecipeError } from '../services/ai'
+import { generateBattleRecipes, AIRecipeError } from '../services/ai'
 import { aiRecipeToRecipe } from '../utils/recipeMapper'
 import { vibrate } from '../utils/helpers'
 
 export function RoulettePage() {
   const navigate = useNavigate()
-  const { selectedIngredients, setCurrentRecipe, setIsSpinning, spinMode } = useApp()
-  const { cacheRecipe, getRecentNames } = useRecipeCache()
+  const { selectedIngredients, setCurrentRecipe, setIsSpinning, spinMode, setAiRecipeChoice } = useApp()
   const [phase, setPhase] = useState<'spin' | 'land' | 'brewing' | 'done'>('spin')
   const [flyingChips, setFlyingChips] = useState<string[]>([])
   const [streamText, setStreamText] = useState('')
@@ -32,8 +30,9 @@ export function RoulettePage() {
       setPhase('brewing')
       const messages = [
         'Analyzing your ingredients...',
-        'Consulting the barista AI...',
-        'Designing flavor pairings...',
+        'Brewing recipe option A...',
+        'Brewing recipe option B...',
+        'Balancing flavors...',
       ]
       let i = 0
       const streamTimer = setInterval(() => {
@@ -41,28 +40,36 @@ export function RoulettePage() {
         i++
       }, 1800)
 
-      generateAIRecipe(selectedIngredients, getRecentNames())
-        .then((ai) => {
+      generateBattleRecipes(selectedIngredients, [])
+        .then((response) => {
           clearInterval(streamTimer)
-          const recipe = aiRecipeToRecipe(ai, 'ai')
-          cacheRecipe({ recipe, ingredients: selectedIngredients, createdAt: Date.now() })
-          setCurrentRecipe(recipe)
+          const recipeA = aiRecipeToRecipe(response.recipeA, 'ai')
+          const recipeB = aiRecipeToRecipe(response.recipeB, 'ai')
+          setAiRecipeChoice({ recipeA, recipeB, ingredients: selectedIngredients })
           setIsSpinning(false)
           vibrate(100)
-          navigate('/result')
+          navigate('/ai-choice')
         })
         .catch((err: unknown) => {
           clearInterval(streamTimer)
-          const recipe = getRandomRecipe(selectedIngredients)
+          const recipeA = getRandomRecipe(selectedIngredients)
+          let recipeB = getRandomRecipe(selectedIngredients)
+          while (recipeB.id === recipeA.id) {
+            recipeB = getRandomRecipe(selectedIngredients)
+          }
           const notice =
             err instanceof AIRecipeError
-              ? err.message
-              : 'AI unavailable — here\'s a Quick Recipe instead!'
+              ? `${err.message} — showing Quick Recipes instead.`
+              : 'AI unavailable — here are two Quick Recipes instead!'
           setFallbackNotice(notice)
-          setCurrentRecipe({ ...recipe, tags: [...recipe.tags, 'Quick Fallback'] })
+          setAiRecipeChoice({
+            recipeA: { ...recipeA, tags: [...recipeA.tags, 'Quick Fallback'] },
+            recipeB: { ...recipeB, tags: [...recipeB.tags, 'Quick Fallback'] },
+            ingredients: selectedIngredients,
+          })
           setIsSpinning(false)
           vibrate(50)
-          setTimeout(() => navigate('/result'), 1200)
+          setTimeout(() => navigate('/ai-choice'), 1200)
         })
 
       return () => {
@@ -90,12 +97,15 @@ export function RoulettePage() {
       clearTimeout(doneTimer)
       setIsSpinning(false)
     }
-  }, [navigate, selectedIngredients, setCurrentRecipe, setIsSpinning, isAI, cacheRecipe, getRecentNames])
+  }, [navigate, selectedIngredients, setCurrentRecipe, setIsSpinning, isAI, setAiRecipeChoice])
 
   if (isAI && phase === 'brewing') {
     return (
       <>
-        <BrewingLoader streamingText={streamText} label="AI is crafting your recipe" />
+        <BrewingLoader
+          streamingText={streamText}
+          label="AI is crafting 2 recipes for you"
+        />
         {fallbackNotice && (
           <motion.p
             initial={{ opacity: 0 }}

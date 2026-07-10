@@ -2,9 +2,9 @@ import type { AIBattleResponse, AIRecipeJSON } from '../types'
 import { buildBattlePrompt, buildSingleRecipePrompt } from './prompts'
 import { parseAIJSON } from '../utils/recipeMapper'
 
-const API_KEY = import.meta.env.VITE_OPENAI_API_KEY
-const BASE_URL = import.meta.env.VITE_OPENAI_BASE_URL || 'https://api.openai.com/v1'
-const MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4o-mini'
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY
+const BASE_URL = import.meta.env.VITE_GROQ_BASE_URL || 'https://api.groq.com/openai/v1'
+const MODEL = import.meta.env.VITE_GROQ_MODEL || 'llama-3.3-70b-versatile'
 
 export class AIRecipeError extends Error {
   code: 'NO_API_KEY' | 'API_ERROR' | 'PARSE_ERROR'
@@ -17,13 +17,13 @@ export class AIRecipeError extends Error {
 }
 
 export function hasAPIKey(): boolean {
-  return Boolean(API_KEY && API_KEY !== 'your_api_key_here')
+  return Boolean(API_KEY && API_KEY !== 'your_groq_key_here')
 }
 
 async function callLLM(prompt: string): Promise<string> {
   if (!hasAPIKey()) {
     throw new AIRecipeError(
-      'Add your API key to .env as VITE_OPENAI_API_KEY',
+      'Add your Groq API key to .env as VITE_GROQ_API_KEY',
       'NO_API_KEY'
     )
   }

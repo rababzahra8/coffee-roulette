@@ -6,6 +6,7 @@ import { HomePage } from './pages/HomePage'
 import { RoulettePage } from './pages/RoulettePage'
 import { ResultPage } from './pages/ResultPage'
 import { FavoritesPage } from './pages/FavoritesPage'
+import { AIChoicePage } from './pages/AIChoicePage'
 import { BrewBattlePage } from './pages/BrewBattlePage'
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/roulette" element={<RoulettePage />} />
             <Route path="/result" element={<ResultPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/ai-choice" element={<AIChoicePage />} />
             <Route path="/brew-battle" element={<BrewBattlePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

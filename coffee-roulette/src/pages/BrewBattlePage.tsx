@@ -85,7 +85,7 @@ export function BrewBattlePage() {
       setError(
         err instanceof AIRecipeError
           ? err.message
-          : 'Could not generate battle. Check your API key in .env'
+          : 'Could not generate battle. Check VITE_GROQ_API_KEY in .env'
       )
     } finally {
       setLoading(false)

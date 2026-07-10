@@ -49,7 +49,7 @@ export function SpinModeSheet({ open, onClose, onSelect }: SpinModeSheetProps) {
                 Ask AI ✨
               </h3>
               <p className="text-sm text-espresso/60 dark:text-cream/60 mt-1">
-                Brand-new recipe · Creative names · Flavor science
+                2 unique AI recipes · Pick your favorite · Flavor science
               </p>
             </div>
           </div>
