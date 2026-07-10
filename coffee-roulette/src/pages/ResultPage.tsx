@@ -15,14 +15,11 @@ import type { SpinMode } from '../types'
 
 export function ResultPage() {
   const navigate = useNavigate()
-  const { currentRecipe, selectedIngredients, setSpinMode } = useApp()
+  const { currentRecipe, selectedIngredients, setSpinMode, setIsSpinning } = useApp()
   const { isFavorite, toggleFavorite } = useFavorites()
   const [showSpinSheet, setShowSpinSheet] = useState(false)
 
-  if (!currentRecipe) {
-    navigate('/home')
-    return null
-  }
+  if (!currentRecipe) return null
 
   const isAI = currentRecipe.source === 'ai' || currentRecipe.source === 'battle'
   const ruleBasedSubs = getSubstitutionMessages(currentRecipe.ingredients, selectedIngredients)
@@ -45,6 +42,7 @@ export function ResultPage() {
   const handleSpinSelect = (mode: SpinMode) => {
     setSpinMode(mode)
     setShowSpinSheet(false)
+    setIsSpinning(true)
     navigate('/roulette')
   }
 

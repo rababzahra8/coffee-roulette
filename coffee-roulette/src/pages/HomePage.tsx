@@ -14,7 +14,7 @@ import type { SpinMode } from '../types'
 
 export function HomePage() {
   const navigate = useNavigate()
-  const { selectedIngredients, toggleIngredient, addIngredient, setSpinMode } = useApp()
+  const { selectedIngredients, toggleIngredient, addIngredient, setSpinMode, setIsSpinning } = useApp()
   const [search, setSearch] = useState('')
   const [showSpinSheet, setShowSpinSheet] = useState(false)
   const greeting = getGreeting()
@@ -35,6 +35,7 @@ export function HomePage() {
   const handleSpinSelect = (mode: SpinMode) => {
     setSpinMode(mode)
     setShowSpinSheet(false)
+    setIsSpinning(true)
     navigate('/roulette')
   }
 

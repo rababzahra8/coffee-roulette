@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
@@ -14,10 +14,6 @@ export function AIChoicePage() {
   const { aiRecipeChoice, setAiRecipeChoice, setCurrentRecipe } = useApp()
   const { cacheRecipe } = useRecipeCache()
   const [activeCard, setActiveCard] = useState<0 | 1>(0)
-
-  useEffect(() => {
-    if (!aiRecipeChoice) navigate('/home')
-  }, [aiRecipeChoice, navigate])
 
   if (!aiRecipeChoice) return null
 
