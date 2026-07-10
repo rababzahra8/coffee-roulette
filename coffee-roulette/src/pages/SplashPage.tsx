@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { markSplashSeen } from '../components/routing/RootPage'
 import { motion } from 'framer-motion'
 import { CoffeeCup } from '../components/coffee/CoffeeCup'
 import { Steam } from '../components/coffee/Steam'
@@ -9,7 +10,10 @@ export function SplashPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const timer = setTimeout(() => navigate('/home'), 3200)
+    const timer = setTimeout(() => {
+      markSplashSeen()
+      navigate('/home')
+    }, 3200)
     return () => clearTimeout(timer)
   }, [navigate])
 
